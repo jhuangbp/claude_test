@@ -6,15 +6,20 @@ license: MIT
 license_url: https://github.com/jhuangbp/claude_test/blob/main/LICENSE
 
 databases:
-  example:
-    title: Marine Revenue FY20-FY24
-    description: 美國海軍陸戰隊在日本和韓國各基地的收入數據（財政年度 2016-2020）
+  Marine_Revenue_FY20-FY24_detail:
+    title: Marine Revenue - 月度收入明細
+    description: 美國海軍陸戰隊各基地每月詳細收入數據（FY16-FY20）
     tables:
       revenue_detail:
         title: 月度收入明細
-        description: 各基地每月詳細收入數據，包含 Revenue 和 NAFI 金額
+        description: 包含各基地每月的 Revenue 和 NAFI 金額，共 7,309 筆記錄
         label_column: location
+
+  Marine_Revenue_FY20-FY24_summary_table:
+    title: Marine Revenue - 年度收入彙總
+    description: 美國海軍陸戰隊按國家和基地分類的年度收入彙總（FY16-FY20）
+    tables:
       revenue_summary:
         title: 年度收入彙總
-        description: 按國家和基地分類的年度收入彙總表（FY16-FY20）
+        description: 按國家和基地分類的年度收入彙總表，包含日本和韓國各基地數據，共 97 筆記錄
         label_column: installation
