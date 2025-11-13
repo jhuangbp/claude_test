@@ -4,6 +4,6 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "datasette serve Marine_Revenue_FY20-FY24_detail.db Marine_Revenue_FY20-FY24_summary_table.db --host 0.0.0.0 --port 8001 --cors --metadata metadata.yml --config-file datasette.yml"
+startCommand = "datasette serve Marine_Revenue_FY20-FY24_detail.db Marine_Revenue_FY20-FY24_summary_table.db --host 0.0.0.0 --port 8001 --cors --metadata metadata.yml --config datasette.yml"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
