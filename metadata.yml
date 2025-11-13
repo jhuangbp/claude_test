@@ -1,19 +1,20 @@
-title: Datasette 範例專案
-description: 展示 Datasette 功能的範例數據庫
+title: Marine Revenue Database
+description: 美國海軍陸戰隊基地收入數據分析系統（FY16-FY20）
 source: GitHub
-source_url: https://github.com/yourusername/datasette-cloud
+source_url: https://github.com/jhuangbp/claude_test
 license: MIT
-license_url: https://github.com/yourusername/datasette-cloud/blob/main/LICENSE
+license_url: https://github.com/jhuangbp/claude_test/blob/main/LICENSE
 
 databases:
   example:
-    title: 產品管理系統
-    description: 包含產品和訂單的範例數據
+    title: Marine Revenue FY20-FY24
+    description: 美國海軍陸戰隊在日本和韓國各基地的收入數據（財政年度 2016-2020）
     tables:
-      products:
-        title: 產品列表
-        description: 所有可用產品
-        label_column: name
-      orders:
-        title: 訂單記錄
-        description: 客戶訂單歷史
+      revenue_detail:
+        title: 月度收入明細
+        description: 各基地每月詳細收入數據，包含 Revenue 和 NAFI 金額
+        label_column: location
+      revenue_summary:
+        title: 年度收入彙總
+        description: 按國家和基地分類的年度收入彙總表（FY16-FY20）
+        label_column: installation
