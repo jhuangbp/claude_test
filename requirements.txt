@@ -1,2 +1,1 @@
 datasette>=0.64
-datasette-publish-fly>=1.3
