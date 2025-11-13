@@ -6,7 +6,8 @@ services:
     ports:
       - "8001:8001"
     volumes:
-      - ./example.db:/app/example.db
+      - ./Marine_Revenue_FY20-FY24_detail.db:/app/Marine_Revenue_FY20-FY24_detail.db
+      - ./Marine_Revenue_FY20-FY24_summary_table.db:/app/Marine_Revenue_FY20-FY24_summary_table.db
       - ./metadata.yml:/app/metadata.yml
       - ./datasette.yml:/app/datasette.yml
     restart: unless-stopped
