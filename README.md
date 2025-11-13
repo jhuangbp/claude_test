@@ -1,6 +1,6 @@
 # Marine Revenue Database - Datasette 雲部署專案
 
-美國海軍陸戰隊基地收入數據分析系統，基於 Datasette 構建，支援多種雲平台部署。
+美國海軍陸戰隊基地收入數據分析系統，基於 Datasette 構建，支援 Render 雲平台部署，並提供其他雲平台的參考配置。
 
 ## 專案簡介
 
@@ -26,7 +26,7 @@
 
 - 兩個專門的 Marine Revenue SQLite 資料庫（月度明細 + 年度彙總）
 - Docker 容器化支援
-- 支援多個雲平台部署：Fly.io、Railway、Render
+- 支援 Render 雲平台部署
 - 完整的配置文件和元數據
 - 開箱即用，內建索引優化
 
@@ -91,79 +91,7 @@ docker-compose up -d
 
 ## 雲平台部署
 
-### 1. Fly.io 部署
-
-Fly.io 是一個現代化的應用平台，提供全球分佈式部署。
-
-**步驟：**
-
-1. 安裝 Fly CLI
-   ```bash
-   curl -L https://fly.io/install.sh | sh
-   ```
-
-2. 登入 Fly.io
-   ```bash
-   fly auth login
-   ```
-
-3. 修改 `fly.toml` 中的 app 名稱（必須唯一）
-   ```toml
-   app = "your-unique-app-name"
-   ```
-
-4. 部署應用
-   ```bash
-   fly launch --config fly.toml
-   ```
-
-5. 訪問應用
-   ```bash
-   fly open
-   ```
-
-**優點：**
-- 免費額度（3 個共享 CPU 應用）
-- 全球 CDN 和邊緣部署
-- 自動 HTTPS
-- 優秀的性能
-
-### 2. Railway 部署
-
-Railway 提供簡單的一鍵部署體驗。
-
-**步驟：**
-
-1. 安裝 Railway CLI
-   ```bash
-   npm i -g @railway/cli
-   ```
-
-2. 登入 Railway
-   ```bash
-   railway login
-   ```
-
-3. 初始化並部署
-   ```bash
-   railway init
-   railway up
-   ```
-
-或者直接通過 GitHub 部署：
-
-1. 訪問 [Railway](https://railway.app)
-2. 點擊 "New Project" → "Deploy from GitHub repo"
-3. 選擇此倉庫
-4. Railway 會自動檢測 Dockerfile 並部署
-
-**優點：**
-- 簡單易用
-- 免費額度（$5/月）
-- 自動從 GitHub 部署
-- 內建監控
-
-### 3. Render 部署
+### Render 部署
 
 Render 提供完全託管的雲服務。
 
@@ -189,7 +117,7 @@ Render 提供完全託管的雲服務。
 - 自動部署
 - 易於配置
 
-### 4. Google Cloud Run 部署
+### Google Cloud Run 部署
 
 ```bash
 # 設定專案
@@ -206,7 +134,7 @@ gcloud run deploy datasette \
   --allow-unauthenticated
 ```
 
-### 5. AWS App Runner 部署
+### AWS App Runner 部署
 
 1. 推送 Docker 鏡像至 Amazon ECR
 2. 在 AWS App Runner 控制台創建新服務
@@ -227,8 +155,6 @@ gcloud run deploy datasette \
 ├── Marine_Revenue_FY20-FY24_summary_table.csv   # 原始 CSV 數據（彙總）
 ├── metadata.yml                                  # Datasette 元數據配置
 ├── datasette.yml                                 # Datasette 設定配置
-├── fly.toml                                      # Fly.io 部署配置
-├── railway.toml                                  # Railway 部署配置
 ├── render.yaml                                   # Render 部署配置
 └── README.md                                     # 本文件
 ```
@@ -324,7 +250,7 @@ FROM revenue_summary;
 1. 將新的 SQLite 資料庫檔案放入專案根目錄
 2. 更新 `metadata.yml` 添加新資料庫的配置
 3. 修改 `Dockerfile` 的 COPY 和 CMD 指令
-4. 更新 `docker-compose.yml`, `railway.toml` 等部署配置
+4. 更新 `docker-compose.yml` 等部署配置
 
 ### 從 CSV 創建資料庫
 
@@ -378,16 +304,6 @@ pip install datasette-auth-passwords
 
 ### 查看日誌
 
-**Fly.io:**
-```bash
-fly logs
-```
-
-**Railway:**
-```bash
-railway logs
-```
-
 **Render:**
 通過 Dashboard 查看日誌
 
@@ -399,22 +315,12 @@ railway logs
 2. 推送至遠端倉庫
 3. 大多數平台會自動重新部署
 
-或手動觸發：
-
-```bash
-# Fly.io
-fly deploy
-
-# Railway
-railway up
-```
+或在 Render Dashboard 中手動點擊 **Manual Deploy** 以重新部署。
 
 ## 成本估算
 
 | 平台 | 免費額度 | 付費方案起價 |
 |------|---------|-------------|
-| Fly.io | 3 個共享 CPU 應用 | $0.0000021/秒 |
-| Railway | $5/月額度 | $5/月 |
 | Render | 750 小時/月 | $7/月 |
 | Cloud Run | 200 萬請求/月 | 按用量計費 |
 
@@ -441,8 +347,6 @@ SQLite 在高並發下可能出現鎖定。考慮：
 ## 相關資源
 
 - [Datasette 官方文檔](https://docs.datasette.io/)
-- [Fly.io 文檔](https://fly.io/docs/)
-- [Railway 文檔](https://docs.railway.app/)
 - [Render 文檔](https://render.com/docs)
 - [Datasette 插件目錄](https://datasette.io/plugins)
 
