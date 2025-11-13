@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  datasette:
+    build: .
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./example.db:/app/example.db
+      - ./metadata.yml:/app/metadata.yml
+      - ./datasette.yml:/app/datasette.yml
+    restart: unless-stopped
+    environment:
+      - PORT=8001

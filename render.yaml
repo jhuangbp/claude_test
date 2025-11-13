@@ -1,0 +1,12 @@
+# Render.com 配置文件
+services:
+  - type: web
+    name: datasette
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: PORT
+        value: 8001
+    healthCheckPath: /
