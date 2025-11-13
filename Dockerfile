@@ -23,4 +23,4 @@ CMD ["datasette", "serve", \
      "--port", "8001", \
      "--cors", \
      "--metadata", "metadata.yml", \
-     "--config-file", "datasette.yml"]
+     "--config", "datasette.yml"]
