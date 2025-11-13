@@ -1,18 +1,34 @@
-# Datasette 雲部署專案
+# Marine Revenue Database - Datasette 雲部署專案
 
-這是一個完整的 Datasette 雲部署環境，支援多種雲平台部署選項。
+美國海軍陸戰隊基地收入數據分析系統，基於 Datasette 構建，支援多種雲平台部署。
 
 ## 專案簡介
 
-Datasette 是一個強大的開源工具，用於探索和發布數據。此專案提供了完整的部署配置，讓你可以輕鬆在各大雲平台上運行 Datasette。
+本專案使用 Datasette 開源工具來探索和分析美國海軍陸戰隊在日本和韓國各基地的收入數據（財政年度 2016-2020）。提供完整的部署配置，讓您可以輕鬆在各大雲平台上運行資料庫查詢和分析。
+
+## 資料庫內容
+
+本專案包含兩個 Marine Revenue 資料庫：
+
+### 1. Marine_Revenue_FY20-FY24_detail.db (776 KB)
+- **表名稱**: revenue_detail
+- **記錄數**: 7,309 筆
+- **內容**: 各基地每月詳細收入數據
+- **欄位**: Page, Loc #, Location, Month, Revenue, NAFI Amt, Annual Revenue, Annual NAFI
+
+### 2. Marine_Revenue_FY20-FY24_summary_table.db (28 KB)
+- **表名稱**: revenue_summary
+- **記錄數**: 97 筆
+- **內容**: 按國家和基地分類的年度收入彙總
+- **欄位**: Page, Country, Installation, FY16, FY17, FY18, FY19, FY20 thru SEP, Annualized FY20
 
 ## 功能特點
 
-- 預配置的範例 SQLite 數據庫（產品和訂單管理系統）
+- 兩個專門的 Marine Revenue SQLite 資料庫（月度明細 + 年度彙總）
 - Docker 容器化支援
 - 支援多個雲平台部署：Fly.io、Railway、Render
 - 完整的配置文件和元數據
-- 開箱即用
+- 開箱即用，內建索引優化
 
 ## 本地開發
 
@@ -25,7 +41,7 @@ Datasette 是一個強大的開源工具，用於探索和發布數據。此專�
 
 1. **克隆專案**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/jhuangbp/claude_test.git
    cd claude_test
    ```
 
@@ -34,23 +50,26 @@ Datasette 是一個強大的開源工具，用於探索和發布數據。此專�
    pip install -r requirements.txt
    ```
 
-3. **初始化數據庫（如果需要）**
+3. **啟動 Datasette**
    ```bash
-   python3 init_database.py
-   ```
-
-4. **啟動 Datasette**
-   ```bash
-   datasette serve example.db \
+   datasette serve \
+     Marine_Revenue_FY20-FY24_detail.db \
+     Marine_Revenue_FY20-FY24_summary_table.db \
      --host 0.0.0.0 \
      --port 8001 \
      --metadata metadata.yml \
-     --config-file datasette.yml
+     --config datasette.yml
    ```
 
-5. **訪問應用**
+4. **訪問應用**
 
    打開瀏覽器訪問：http://localhost:8001
+
+   您可以：
+   - 瀏覽兩個資料庫的所有表格
+   - 執行 SQL 查詢分析收入數據
+   - 使用 Datasette 的內建篩選和排序功能
+   - 導出數據為 CSV 或 JSON 格式
 
 ## Docker 部署
 
@@ -199,32 +218,42 @@ gcloud run deploy datasette \
 
 ```
 .
-├── Dockerfile              # Docker 配置
-├── docker-compose.yml      # Docker Compose 配置
-├── requirements.txt        # Python 依賴
-├── example.db             # SQLite 數據庫
-├── init_database.py       # 數據庫初始化腳本
-├── metadata.yml           # Datasette 元數據配置
-├── datasette.yml          # Datasette 設定配置
-├── fly.toml               # Fly.io 部署配置
-├── railway.toml           # Railway 部署配置
-├── render.yaml            # Render 部署配置
-└── README.md              # 本文件
+├── Dockerfile                                    # Docker 配置
+├── docker-compose.yml                            # Docker Compose 配置
+├── requirements.txt                              # Python 依賴
+├── Marine_Revenue_FY20-FY24_detail.db           # 月度收入明細資料庫 (776 KB)
+├── Marine_Revenue_FY20-FY24_summary_table.db    # 年度收入彙總資料庫 (28 KB)
+├── Marine_Revenue_FY20-FY24_detail.csv          # 原始 CSV 數據（明細）
+├── Marine_Revenue_FY20-FY24_summary_table.csv   # 原始 CSV 數據（彙總）
+├── metadata.yml                                  # Datasette 元數據配置
+├── datasette.yml                                 # Datasette 設定配置
+├── fly.toml                                      # Fly.io 部署配置
+├── railway.toml                                  # Railway 部署配置
+├── render.yaml                                   # Render 部署配置
+└── README.md                                     # 本文件
 ```
 
 ## 配置說明
 
 ### metadata.yml
 
-包含數據庫和表的元數據，如標題、描述等。
+包含兩個資料庫的元數據配置：
+- **Marine_Revenue_FY20-FY24_detail**: 月度收入明細資料庫配置
+- **Marine_Revenue_FY20-FY24_summary_table**: 年度收入彙總資料庫配置
+
+每個資料庫都有：
+- 中文標題和描述
+- 表格的標籤欄位設定
+- 數據統計信息
 
 ### datasette.yml
 
 Datasette 的運行時設定，包括：
-- 默認頁面大小
-- SQL 查詢限制
-- 緩存設定
-- 下載權限等
+- 默認頁面大小：20 筆記錄
+- 最大返回行數：1000
+- SQL 查詢時間限制：1000ms
+- 支援 CSV 串流導出
+- 自動建議分面（facet）功能
 
 ### 環境變數
 
@@ -233,22 +262,93 @@ Datasette 的運行時設定，包括：
 - `PORT`: 服務端口（默認 8001）
 - `DATASETTE_SECRET`: 用於簽名 cookies
 
-## 數據庫說明
+## 資料庫詳細說明
 
-專案包含一個範例數據庫 `example.db`，包含：
+### revenue_detail 表（月度明細）
 
-- **products 表**: 產品信息（名稱、類別、價格、庫存）
-- **orders 表**: 訂單記錄（產品、數量、客戶名稱）
+包含 7,309 筆美國海軍陸戰隊各基地的每月收入記錄：
 
-你可以運行 `init_database.py` 重新生成數據庫。
+- **地點範圍**: 日本（Camp Fuji, Camp Schwab, Camp Hansen, Camp Courtney, Camp Butler/Foster, Camp Kinser, Iwakuni）和韓國（Camp Mujuk）
+- **時間範圍**: 2015-2019 年
+- **收入類型**: Revenue（收入）和 NAFI Amt（NAFI 金額）
+- **索引**: location, month, page
 
-## 自定義數據庫
+**範例查詢**：
+```sql
+-- 查詢特定基地的年度總收入
+SELECT location, SUM(revenue) as total_revenue
+FROM revenue_detail
+WHERE location = 'Camp Butler/Foster'
+GROUP BY location;
 
-要使用自己的數據庫：
+-- 查詢各基地月平均收入
+SELECT location, AVG(revenue) as avg_monthly_revenue
+FROM revenue_detail
+WHERE revenue IS NOT NULL
+GROUP BY location
+ORDER BY avg_monthly_revenue DESC;
+```
 
-1. 替換 `example.db` 為你的 SQLite 數據庫
-2. 更新 `metadata.yml` 中的配置
-3. 如有需要，修改 Dockerfile 中的數據庫名稱
+### revenue_summary 表（年度彙總）
+
+包含 97 筆按國家和基地分類的年度收入彙總：
+
+- **國家**: 日本、韓國
+- **財政年度**: FY16, FY17, FY18, FY19, FY20
+- **數據類型**: 各財政年度的總收入和年化收入
+- **索引**: installation, country, page
+
+**範例查詢**：
+```sql
+-- 比較各基地在不同年度的收入趨勢
+SELECT installation, fy16, fy17, fy18, fy19, annualized_fy20
+FROM revenue_summary
+WHERE country = 'Japan'
+ORDER BY annualized_fy20 DESC;
+
+-- 計算各年度的總收入
+SELECT
+  SUM(fy16) as total_fy16,
+  SUM(fy17) as total_fy17,
+  SUM(fy18) as total_fy18,
+  SUM(fy19) as total_fy19
+FROM revenue_summary;
+```
+
+## 自定義與擴展
+
+### 添加新資料庫
+
+要添加自己的資料庫：
+
+1. 將新的 SQLite 資料庫檔案放入專案根目錄
+2. 更新 `metadata.yml` 添加新資料庫的配置
+3. 修改 `Dockerfile` 的 COPY 和 CMD 指令
+4. 更新 `docker-compose.yml`, `railway.toml` 等部署配置
+
+### 從 CSV 創建資料庫
+
+如果您有 CSV 檔案想轉換為 SQLite：
+
+```python
+import sqlite3
+import csv
+
+conn = sqlite3.connect('your_database.db')
+cursor = conn.cursor()
+
+# 創建表
+cursor.execute('''CREATE TABLE your_table (...)''')
+
+# 導入 CSV
+with open('your_data.csv', 'r') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        cursor.execute('INSERT INTO your_table VALUES (...)', tuple(row.values()))
+
+conn.commit()
+conn.close()
+```
 
 ## 進階配置
 

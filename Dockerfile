@@ -10,7 +10,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY Marine_Revenue_FY20-FY24_detail.db .
 COPY Marine_Revenue_FY20-FY24_summary_table.db .
 COPY metadata.yml .
-COPY datasette.yml .
 
 # 暴露端口
 EXPOSE 8001
@@ -22,5 +21,4 @@ CMD ["datasette", "serve", \
      "--host", "0.0.0.0", \
      "--port", "8001", \
      "--cors", \
-     "--metadata", "metadata.yml", \
-     "--config", "datasette.yml"]
+     "--metadata", "metadata.yml"]
