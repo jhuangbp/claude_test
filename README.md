@@ -1,4 +1,4 @@
-# Marine Revenue Database - Datasette Cloud Deployment Project
+# Army Slot Machine Database - Datasette Cloud Deployment Project
 
 US Marine Corps base revenue data analysis system, built on Datasette, supporting Render cloud platform deployment with reference configurations for other cloud platforms.
 
