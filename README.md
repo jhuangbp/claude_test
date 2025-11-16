@@ -33,11 +33,36 @@ This project contains three military revenue databases:
 ## Features
 
 - Three military revenue SQLite databases (Marine monthly details + Marine annual summary + Army district revenue with geographic data)
-- Geographic visualization support with latitude/longitude data
+- **Interactive Geographic Map Visualization** with latitude/longitude data using Leaflet.js
+- Cluster map visualization for Army district revenue data
 - Docker containerization support
 - Render cloud platform deployment support
 - Complete configuration files and metadata
 - Ready to use out of the box with built-in index optimization
+
+## Geographic Map Visualization
+
+The District Revenue database includes interactive map visualization powered by the `datasette-cluster-map` plugin.
+
+### Features:
+- **Interactive Map**: Visualize all Army bases on an interactive Leaflet map
+- **Marker Clustering**: Automatically groups nearby markers for better performance and clarity
+- **Base Locations**: View geographic distribution of 40 Army bases across Europe, Pacific, and Americas regions
+- **Click for Details**: Click on any marker to see base information and revenue data
+
+### How to Use:
+1. Start Datasette (see Local Development section below)
+2. Navigate to the District Revenue table: http://localhost:8001/District_Revenue_with_lat_lon/district_revenue
+3. The interactive map will appear at the top of the page showing all base locations
+4. Zoom and pan to explore different regions
+5. Click on markers to view base details
+
+### Technical Details:
+- **Plugin**: datasette-cluster-map (v0.17+)
+- **Map Library**: Leaflet.js
+- **Latitude Field**: `Base_lat`
+- **Longitude Field**: `Base_lon`
+- **Marker Clustering**: Enabled for better performance with large datasets
 
 ## Local Development
 
