@@ -1,4 +1,4 @@
-# Render.com 配置文件
+# Render.com configuration file
 services:
   - type: web
     name: datasette

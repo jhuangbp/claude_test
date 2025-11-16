@@ -1,5 +1,5 @@
 title: Marine Revenue Database
-description: 美國海軍陸戰隊基地收入數據分析系統（FY16-FY20）
+description: US Marine Corps Base Revenue Data Analysis System (FY16-FY20)
 source: GitHub
 source_url: https://github.com/jhuangbp/claude_test
 license: MIT
@@ -7,21 +7,21 @@ license_url: https://github.com/jhuangbp/claude_test/blob/main/LICENSE
 
 databases:
   Marine_Revenue_FY20-FY24_detail:
-    title: Marine Revenue - 月度收入明細
-    description: 美國海軍陸戰隊各基地每月詳細收入數據（FY16-FY20）
+    title: Marine Revenue - Monthly Detail
+    description: US Marine Corps monthly detailed revenue data for each base (FY16-FY20)
     tables:
       revenue_detail:
-        title: 月度收入明細
-        description: 包含各基地每月的 Revenue 和 NAFI 金額，共 7,309 筆記錄
+        title: Monthly Revenue Detail
+        description: Contains monthly Revenue and NAFI amounts for each base, 7,309 records total
         label_column: location
 
   Marine_Revenue_FY20-FY24_summary_table:
-    title: Marine Revenue - 年度收入彙總
-    description: 美國海軍陸戰隊按國家和基地分類的年度收入彙總（FY16-FY20）
+    title: Marine Revenue - Annual Summary
+    description: US Marine Corps annual revenue summary by country and base (FY16-FY20)
     tables:
       revenue_summary:
-        title: 年度收入彙總
-        description: 按國家和基地分類的年度收入彙總表，包含日本和韓國各基地數據，共 97 筆記錄
+        title: Annual Revenue Summary
+        description: Annual revenue summary table by country and base, including data for bases in Japan and South Korea, 97 records total
         label_column: installation
 
 settings:
