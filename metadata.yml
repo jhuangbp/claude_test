@@ -32,6 +32,12 @@ databases:
         title: District Revenue Detail
         description: Army base monthly revenue data with latitude and longitude coordinates, 9,876 records total
         label_column: location
+        plugins:
+          datasette-cluster-map:
+            latitude_column: Base_lat
+            longitude_column: Base_lon
+            container: "#map-container"
+            marker_cluster: true
 
 settings:
   default_page_size: 20
