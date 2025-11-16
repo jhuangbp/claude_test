@@ -8,23 +8,32 @@ This project uses the Datasette open-source tool to explore and analyze revenue 
 
 ## Database Contents
 
-This project contains two Marine Revenue databases:
+This project contains three military revenue databases:
 
 ### 1. Marine_Revenue_FY20-FY24_detail.db (776 KB)
 - **Table Name**: revenue_detail
 - **Records**: 7,309 entries
-- **Content**: Monthly detailed revenue data for each base
+- **Content**: Monthly detailed revenue data for each Marine base
 - **Fields**: Page, Loc #, Location, Month, Revenue, NAFI Amt, Annual Revenue, Annual NAFI
 
 ### 2. Marine_Revenue_FY20-FY24_summary_table.db (28 KB)
 - **Table Name**: revenue_summary
 - **Records**: 97 entries
-- **Content**: Annual revenue summary by country and base
+- **Content**: Annual revenue summary by country and Marine base
 - **Fields**: Page, Country, Installation, FY16, FY17, FY18, FY19, FY20 thru SEP, Annualized FY20
+
+### 3. District_Revenue_with_lat_lon.db (NEW)
+- **Table Name**: district_revenue
+- **Records**: 9,876 entries
+- **Content**: Army district revenue data with geographic coordinates (FY19-FY20)
+- **Fields**: Service, Category, Region, Base, Location, Month, Year, Amount, Base_clean, Base_core, Base_core_matched, Base_lat, Base_lon
+- **Geographic Coverage**: 40 unique Army bases across 3 regions (Europe, Pacific, Americas)
+- **Special Features**: Includes latitude and longitude coordinates for mapping capabilities
 
 ## Features
 
-- Two dedicated Marine Revenue SQLite databases (monthly details + annual summary)
+- Three military revenue SQLite databases (Marine monthly details + Marine annual summary + Army district revenue with geographic data)
+- Geographic visualization support with latitude/longitude data
 - Docker containerization support
 - Render cloud platform deployment support
 - Complete configuration files and metadata
@@ -55,6 +64,7 @@ This project contains two Marine Revenue databases:
    datasette serve \
      Marine_Revenue_FY20-FY24_detail.db \
      Marine_Revenue_FY20-FY24_summary_table.db \
+     District_Revenue_with_lat_lon.db \
      --host 0.0.0.0 \
      --port 8001 \
      --metadata metadata.yml \
@@ -151,8 +161,10 @@ gcloud run deploy datasette \
 ├── requirements.txt                              # Python dependencies
 ├── Marine_Revenue_FY20-FY24_detail.db           # Monthly revenue detail database (776 KB)
 ├── Marine_Revenue_FY20-FY24_summary_table.db    # Annual revenue summary database (28 KB)
+├── District_Revenue_with_lat_lon.db             # Army district revenue with coordinates database
 ├── Marine_Revenue_FY20-FY24_detail.csv          # Original CSV data (detail)
 ├── Marine_Revenue_FY20-FY24_summary_table.csv   # Original CSV data (summary)
+├── District_Revenue_with_lat_lon.csv            # Original CSV data (district revenue)
 ├── metadata.yml                                  # Datasette metadata configuration
 ├── datasette.yml                                 # Datasette settings configuration
 ├── render.yaml                                   # Render deployment configuration
@@ -163,9 +175,10 @@ gcloud run deploy datasette \
 
 ### metadata.yml
 
-Contains metadata configuration for both databases:
+Contains metadata configuration for all three databases:
 - **Marine_Revenue_FY20-FY24_detail**: Monthly revenue detail database configuration
 - **Marine_Revenue_FY20-FY24_summary_table**: Annual revenue summary database configuration
+- **District_Revenue_with_lat_lon**: Army district revenue with geographic data
 
 Each database has:
 - English titles and descriptions
@@ -239,6 +252,38 @@ SELECT
   SUM(fy18) as total_fy18,
   SUM(fy19) as total_fy19
 FROM revenue_summary;
+```
+
+### district_revenue Table (Army District Revenue with Coordinates)
+
+Contains 9,876 monthly revenue records for US Army bases with geographic coordinates:
+
+- **Geographic Coverage**: 40 unique bases across 3 regions (Europe, Pacific, Americas)
+- **Time Range**: FY19-FY20
+- **Special Features**: Includes latitude and longitude for mapping
+- **Indexes**: base, region, year, location
+
+**Example Queries**:
+```sql
+-- Query revenue by region with geographic data
+SELECT region, base, base_lat, base_lon, SUM(amount) as total_revenue
+FROM district_revenue
+WHERE amount > 0
+GROUP BY region, base, base_lat, base_lon
+ORDER BY total_revenue DESC;
+
+-- Find bases in a specific region
+SELECT DISTINCT base, base_lat, base_lon, region
+FROM district_revenue
+WHERE region = 'Europe'
+ORDER BY base;
+
+-- Monthly revenue trend for a specific base
+SELECT year, month, SUM(amount) as monthly_total
+FROM district_revenue
+WHERE base = 'Ansbach'
+GROUP BY year, month
+ORDER BY year, month;
 ```
 
 ## Customization and Extension

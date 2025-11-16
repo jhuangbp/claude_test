@@ -24,6 +24,15 @@ databases:
         description: Annual revenue summary table by country and base, including data for bases in Japan and South Korea, 97 records total
         label_column: installation
 
+  District_Revenue_with_lat_lon:
+    title: District Revenue with Geographic Data
+    description: US Army district revenue data with geographic coordinates (FY19-FY20)
+    tables:
+      district_revenue:
+        title: District Revenue Detail
+        description: Army base monthly revenue data with latitude and longitude coordinates, 9,876 records total
+        label_column: location
+
 settings:
   default_page_size: 20
   max_returned_rows: 1000
