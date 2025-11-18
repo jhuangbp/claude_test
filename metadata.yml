@@ -38,6 +38,7 @@ databases:
             longitude_column: Base_lon
             container: "#map-container"
             marker_cluster: true
+            max_rows: 10000
 
 settings:
   default_page_size: 20
