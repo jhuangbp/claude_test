@@ -41,7 +41,7 @@ databases:
 
 settings:
   default_page_size: 20
-  max_returned_rows: 1000
+  max_returned_rows: 10000
   num_sql_threads: 3
   allow_download: true
   suggest_facets: true
