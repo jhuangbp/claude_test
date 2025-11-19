@@ -8,6 +8,7 @@ services:
     volumes:
       - ./Marine_Revenue_FY20-FY24_detail.db:/app/Marine_Revenue_FY20-FY24_detail.db
       - ./Marine_Revenue_FY20-FY24_summary_table.db:/app/Marine_Revenue_FY20-FY24_summary_table.db
+      - ./District_Revenue_with_lat_lon.db:/app/District_Revenue_with_lat_lon.db
       - ./metadata.yml:/app/metadata.yml
     restart: unless-stopped
     environment:
