@@ -14,6 +14,13 @@ databases:
         title: Monthly Revenue Detail
         description: Contains monthly Revenue and NAFI amounts for each base, 7,309 records total
         label_column: location
+        plugins:
+          datasette-cluster-map:
+            latitude_column: latitude
+            longitude_column: longitude
+            container: "#map-container"
+            marker_cluster: true
+            max_rows: 10000
 
   Marine_Revenue_FY20-FY24_summary_table:
     title: Marine Revenue - Annual Summary
