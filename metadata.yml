@@ -1,65 +1,89 @@
-title: Army Slot Machine Database
-description: US Marine Corps Base Revenue Data Analysis System (FY16-FY20)
+# Datasette metadata configuration
+# Inspired by public Datasette deployments and tailored to the slot machine revenue datasets in this repository.
+title: Military Slot Machine Revenue Explorer
+description: >-
+  Browse Marine Corps and Army slot machine revenue records with table-level facets and map visualizations
+  for geocoded bases.
 source: GitHub
 source_url: https://github.com/jhuangbp/claude_test
 license: MIT
 license_url: https://github.com/jhuangbp/claude_test/blob/main/LICENSE
 
+settings:
+  default_page_size: 50
+  max_returned_rows: 20000
+  num_sql_threads: 4
+  allow_download: true
+  allow_csv_stream: true
+  suggest_facets: true
+  default_facet_size: 50
+  facet_time_limit_ms: 2000
+  sql_time_limit_ms: 2000
+  allow_facet: true
+  default_cache_ttl: 300
+  cache_size_kb: 0
+  max_csv_mb: 100
+  truncate_cells_html: 2048
+
+plugins:
+  datasette-cluster-map:
+    tile_url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    max_zoom: 18
+
+
 databases:
   Marine_Revenue_FY20-FY24_detail:
-    title: Marine Revenue - Monthly Detail
-    description: US Marine Corps monthly detailed revenue data for each base (FY16-FY20)
+    title: Marine Monthly Slot Machine Revenue
+    description: >-
+      Monthly slot machine revenue and NAFI totals for Marine installations (Apr-2014 through Sep-2024),
+      7,309 records across multiple Pacific bases with latitude/longitude for mapping.
     tables:
       revenue_detail:
-        title: Monthly Revenue Detail
-        description: Contains monthly Revenue and NAFI amounts for each base, 7,309 records total
+        title: Monthly revenue detail
+        description: >-
+          Detailed monthly revenue and NAFI amounts for each Marine base with optional mapping support when
+          latitude and longitude are present.
         label_column: location
+        facets:
+          - location
+          - month
         plugins:
           datasette-cluster-map:
             latitude_column: latitude
             longitude_column: longitude
-            container: "#map-container"
             marker_cluster: true
             max_rows: 10000
 
   Marine_Revenue_FY20-FY24_summary_table:
-    title: Marine Revenue - Annual Summary
-    description: US Marine Corps annual revenue summary by country and base (FY16-FY20)
+    title: Marine Annual Revenue Summary
+    description: Annual slot machine revenue summary by country and base (FY16–FY20), 97 aggregated records.
     tables:
       revenue_summary:
-        title: Annual Revenue Summary
-        description: Annual revenue summary table by country and base, including data for bases in Japan and South Korea, 97 records total
+        title: Annual revenue summary
+        description: Annualized totals for Marine installations with fiscal year columns FY16–FY20.
         label_column: installation
+        facets:
+          - country
+          - installation
 
   District_Revenue_with_lat_lon:
-    title: District Revenue with Geographic Data
-    description: US Army district revenue data with geographic coordinates (FY19-FY20)
+    title: Army District Revenue with Geographic Data
+    description: Army district slot machine revenue (2019–2024) with geocoded bases for cluster map display, 9,876 records.
     tables:
       district_revenue:
-        title: District Revenue Detail
-        description: Army base monthly revenue data with latitude and longitude coordinates, 9,876 records total
-        label_column: location
+        title: District revenue detail
+        description: Monthly Army revenue by service, category, and region with normalized base names and geocodes.
+        label_column: base_core_matched
+        sort_desc: year
+        facets:
+          - region
+          - service
+          - category
+          - year
+          - base_core_matched
         plugins:
           datasette-cluster-map:
-            latitude_column: Base_lat
-            longitude_column: Base_lon
-            container: "#map-container"
+            latitude_column: base_lat
+            longitude_column: base_lon
             marker_cluster: true
             max_rows: 10000
-
-settings:
-  default_page_size: 20
-  max_returned_rows: 5000
-  num_sql_threads: 3
-  allow_download: true
-  suggest_facets: true
-  default_facet_size: 30
-  facet_time_limit_ms: 1000
-  sql_time_limit_ms: 1000
-  allow_facet: true
-  default_cache_ttl: 5
-  cache_size_kb: 0
-  allow_csv_stream: true
-  max_csv_mb: 100
-  truncate_cells_html: 2048
-  force_https_urls: false

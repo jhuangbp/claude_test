@@ -1,10 +1,10 @@
 # Army Slot Machine Database - Datasette Cloud Deployment Project
 
-US Marine Corps base revenue data analysis system, built on Datasette, supporting Render cloud platform deployment with reference configurations for other cloud platforms.
+US Marine Corps and Army slot machine revenue analysis system, built on Datasette, supporting Render cloud platform deployment with reference configurations for other cloud platforms.
 
 ## Project Overview
 
-This project uses the Datasette open-source tool to explore and analyze revenue data from US Marine Corps bases in Japan and South Korea (Fiscal Years 2016-2020). It provides complete deployment configuration, allowing you to easily run database queries and analysis on major cloud platforms.
+This project uses the Datasette open-source tool to explore and analyze slot machine revenue data from US Marine Corps and Army bases, with records spanning fiscal years 2014–2024. It provides complete deployment configuration, allowing you to easily run database queries and analysis on major cloud platforms.
 
 ## Database Contents
 
@@ -13,19 +13,19 @@ This project contains three military revenue databases:
 ### 1. Marine_Revenue_FY20-FY24_detail.db (776 KB)
 - **Table Name**: revenue_detail
 - **Records**: 7,309 entries
-- **Content**: Monthly detailed revenue data for each Marine base
-- **Fields**: Page, Loc #, Location, Month, Revenue, NAFI Amt, Annual Revenue, Annual NAFI
+- **Content**: Monthly detailed revenue data for each Marine base (Apr 2014 – Sep 2024)
+- **Fields**: Page, Loc #, Location, Month, Revenue, NAFI Amt, Annual Revenue, Annual NAFI, Latitude, Longitude
 
 ### 2. Marine_Revenue_FY20-FY24_summary_table.db (28 KB)
 - **Table Name**: revenue_summary
 - **Records**: 97 entries
-- **Content**: Annual revenue summary by country and Marine base
+- **Content**: Annual revenue summary by country and Marine base (FY16 – FY20)
 - **Fields**: Page, Country, Installation, FY16, FY17, FY18, FY19, FY20 thru SEP, Annualized FY20
 
 ### 3. District_Revenue_with_lat_lon.db (NEW)
 - **Table Name**: district_revenue
 - **Records**: 9,876 entries
-- **Content**: Army district revenue data with geographic coordinates (FY19-FY20)
+- **Content**: Army district revenue data with geographic coordinates (2019 – 2024)
 - **Fields**: Service, Category, Region, Base, Location, Month, Year, Amount, Base_clean, Base_core, Base_core_matched, Base_lat, Base_lon
 - **Geographic Coverage**: 40 unique Army bases across 3 regions (Europe, Pacific, Americas)
 - **Special Features**: Includes latitude and longitude coordinates for mapping capabilities
@@ -92,8 +92,7 @@ The District Revenue database includes interactive map visualization powered by 
      District_Revenue_with_lat_lon.db \
      --host 0.0.0.0 \
      --port 8001 \
-     --metadata metadata.yml \
-     --config datasette.yml
+     --metadata metadata.yml
    ```
 
 4. **Access the application**
@@ -190,8 +189,7 @@ gcloud run deploy datasette \
 ├── Marine_Revenue_FY20-FY24_detail.csv          # Original CSV data (detail)
 ├── Marine_Revenue_FY20-FY24_summary_table.csv   # Original CSV data (summary)
 ├── District_Revenue_with_lat_lon.csv            # Original CSV data (district revenue)
-├── metadata.yml                                  # Datasette metadata configuration
-├── datasette.yml                                 # Datasette settings configuration
+├── metadata.yml                                  # Datasette metadata and settings configuration
 ├── render.yaml                                   # Render deployment configuration
 └── README.md                                     # This file
 ```
@@ -200,7 +198,7 @@ gcloud run deploy datasette \
 
 ### metadata.yml
 
-Contains metadata configuration for all three databases:
+Contains metadata and Datasette settings for all three databases:
 - **Marine_Revenue_FY20-FY24_detail**: Monthly revenue detail database configuration
 - **Marine_Revenue_FY20-FY24_summary_table**: Annual revenue summary database configuration
 - **District_Revenue_with_lat_lon**: Army district revenue with geographic data
@@ -209,15 +207,9 @@ Each database has:
 - English titles and descriptions
 - Label field settings for tables
 - Data statistics information
-
-### datasette.yml
-
-Datasette runtime settings, including:
-- Default page size: 20 records
-- Maximum returned rows: 1000
-- SQL query timeout: 1000ms
-- CSV streaming export support
-- Auto-suggest facet functionality
+- Default facets tailored to common filters
+- Map settings for geocoded tables using `datasette-cluster-map`
+- Runtime settings (page size, row limits, cache TTL, CSV streaming) consolidated with metadata
 
 ### Environment Variables
 
@@ -233,9 +225,9 @@ Default settings can be overridden via environment variables:
 Contains 7,309 monthly revenue records for US Marine Corps bases:
 
 - **Location Range**: Japan (Camp Fuji, Camp Schwab, Camp Hansen, Camp Courtney, Camp Butler/Foster, Camp Kinser, Iwakuni) and South Korea (Camp Mujuk)
-- **Time Range**: 2015-2019
-- **Revenue Types**: Revenue and NAFI Amount
-- **Indexes**: location, month, page
+- **Time Range**: Apr 2014 – Sep 2024
+- **Revenue Types**: Revenue and NAFI Amount with optional latitude/longitude for mapping
+- **Common facets**: location, month
 
 **Example Queries**:
 ```sql
@@ -284,9 +276,9 @@ FROM revenue_summary;
 Contains 9,876 monthly revenue records for US Army bases with geographic coordinates:
 
 - **Geographic Coverage**: 40 unique bases across 3 regions (Europe, Pacific, Americas)
-- **Time Range**: FY19-FY20
-- **Special Features**: Includes latitude and longitude for mapping
-- **Indexes**: base, region, year, location
+- **Time Range**: 2019–2024
+- **Special Features**: Includes latitude/longitude for mapping and base normalization fields
+- **Common facets**: region, service, category, year, normalized base name
 
 **Example Queries**:
 ```sql
