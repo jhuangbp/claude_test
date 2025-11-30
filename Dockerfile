@@ -1,15 +1,26 @@
-# Dockerfile for Cloud Run
-# 用於部署到 Google Cloud Run
+FROM python:3.11-slim
 
-FROM nginx:alpine
+WORKDIR /app
 
-# 複製所有檔案到 nginx 的 html 目錄
-COPY . /usr/share/nginx/html
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# 暴露 8080 埠（Cloud Run 預設埠）
-EXPOSE 8080
+# Copy database and configuration files
+COPY Marine_Revenue_FY20-FY24_detail.db .
+COPY Marine_Revenue_FY20-FY24_summary_table.db .
+COPY District_Revenue_with_lat_lon.db .
+COPY metadata.yml .
 
-# 啟動 nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Expose port
+EXPOSE 8001
 
-
+# Start datasette
+CMD ["datasette", "serve", \
+     "Marine_Revenue_FY20-FY24_detail.db", \
+     "Marine_Revenue_FY20-FY24_summary_table.db", \
+     "District_Revenue_with_lat_lon.db", \
+     "--host", "0.0.0.0", \
+     "--port", "8001", \
+     "--cors", \
+     "--metadata", "metadata.yml"]

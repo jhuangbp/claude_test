@@ -1,0 +1,2 @@
+datasette>=0.64
+datasette-cluster-map>=0.17
