@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pizza Slicer - Equal Portions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f9fafc; margin: 0; padding: 2em; }
+    #pizza-canvas-container { width: 400px; height: 400px; margin: auto; background: #fff3; border-radius: 1em; box-shadow: 0 2px 12px #0001; display: flex; align-items: center; justify-content: center;}
+    #pizza-canvas { display: block; background: #fffbe9; border-radius: 50%; }
+    .controls { display: flex; gap: 1em; align-items: center; justify-content: center; margin-bottom: 1.2em; }
+    select, input, button { padding: 0.4em 0.7em; border-radius: 6px; border: 1px solid #aaa; }
+    #instructions { margin: 2em auto 0 auto; max-width: 420px; background: #fffbe9; border-radius: 0.7em; padding: 1em 1.2em; color: #624100; font-size: 1.06em; }
+    @media (max-width: 500px) {
+      #pizza-canvas-container { width: 96vw; height: 96vw; max-width: 98vw; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🍕 Pizza Slicer</h1>
+    <div class="input-section">
+      <div class="input-group">
+        <label for="pizza-size">Pizza Size (inches):</label>
+        <input type="number" id="pizza-size" min="8" max="24" value="12">
+      </div>
+      <div class="input-group">
+        <label for="people-count">Number of People:</label>
+        <input type="number" id="people-count" min="1" max="12" value="4">
+      </div>
+      <div class="input-group">
+        <label for="pattern-select">Cutting Pattern:</label>
+        <select id="pattern-select">
+          <option value="crisscross">Criss-cross Grid</option>
+          <option value="chord">Parallel Chords</option>
+          <option value="spiral">Spiral</option>
+          <option value="concentric">Concentric Rings</option>
+          <option value="puzzle">Puzzle</option>
+        </select>
+      </div>
+      <button id="calculate-btn">Slice the Pizza! 🍕</button>
+    </div>
+    <div id="pizza-canvas-container">
+      <canvas id="pizza-canvas"></canvas>
+    </div>
+    <div id="instructions"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

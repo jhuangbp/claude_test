@@ -1,0 +1,15 @@
+# App Engine 設定檔
+# 用於部署到 Google App Engine
+
+runtime: python39
+
+handlers:
+- url: /
+  static_files: index.html
+  upload: index.html
+
+- url: /(.*)
+  static_files: \1
+  upload: (.*)
+
+
